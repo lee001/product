@@ -2,6 +2,7 @@ package com.example.product.controller;
 
 import com.example.product.dataobject.ProductCategory;
 import com.example.product.dataobject.ProductInfo;
+import com.example.product.dto.CartDTO;
 import com.example.product.service.CategoryService;
 import com.example.product.service.ProductService;
 import com.example.product.util.ResultVoUtil;
@@ -10,9 +11,7 @@ import com.example.product.vo.ProductVO;
 import com.example.product.vo.ResultVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,5 +74,24 @@ public class ProductController {
         }
 
         return ResultVoUtil.success(productVOList);
+    }
+
+    /**
+     * 获取商品列表(给订单服务用的)
+     * @param productIdList
+     * @return
+     */
+    @PostMapping("/listForOrder")
+    public List<ProductInfo> listForOrder(@RequestBody List<String> productIdList) {
+        return productService.findList(productIdList);
+    }
+
+    /**
+     * 扣库存
+     * @param carDTOList
+     */
+    @PostMapping("/decreaseStock")
+    public void decreaseStock(@RequestBody List<CartDTO> carDTOList) {
+        productService.decreaseStock(carDTOList);
     }
 }
